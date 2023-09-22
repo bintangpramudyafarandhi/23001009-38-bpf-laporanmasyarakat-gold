@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Challenge level gold bootcamp binar",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bintangpramudyafarandhi/23001009-38-bpf-laporanmasyarakat-gold.git"
+  },
+  "keywords": [
+    "challenge-gold"
+  ],
+  "author": "Bintang Pramudya Farandhi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bintangpramudyafarandhi/23001009-38-bpf-laporanmasyarakat-gold/issues"
+  },
+  "homepage": "https://github.com/bintangpramudyafarandhi/23001009-38-bpf-laporanmasyarakat-gold#readme",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
