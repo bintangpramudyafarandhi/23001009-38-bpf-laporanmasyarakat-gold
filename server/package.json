@@ -19,7 +19,7 @@
     "url": "https://github.com/bintangpramudyafarandhi/23001009-38-bpf-laporanmasyarakat-gold/issues"
   },
   "homepage": "https://github.com/bintangpramudyafarandhi/23001009-38-bpf-laporanmasyarakat-gold#readme",
-  "dependencies": {
+  "devDependencies": {
     "nodemon": "^3.0.1"
   }
 }
