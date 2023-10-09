@@ -1,1 +1,21 @@
-////
+const express = require('express')
+const app = express()
+const routes = require('./routes/')
+const ejs = require('ejs')
+const port = 3000
+
+app.set('view engine', 'ejs')
+
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+
+app.use(routes)
+
+app.use('/',(req,res) => {
+    res.status(404)
+    res.render('404')
+})
+  
+app.listen(port, () => {
+    console.log(`I Love You ${port}`)
+})
