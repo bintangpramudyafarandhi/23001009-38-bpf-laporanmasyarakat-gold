@@ -1,6 +1,6 @@
 class UserController {
     static homePage (req, res) {
-        res.render('user')
+        res.send('user')
     }
 }
 

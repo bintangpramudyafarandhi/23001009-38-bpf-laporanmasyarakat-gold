@@ -1,6 +1,6 @@
 class AdminController {
     static homePage (req, res) {
-        res.render('admin')
+        res.send('admin')
     }
 }
 

@@ -6,6 +6,8 @@ const Controller = require('../controllers/Controller')
 
 route.get('/', Controller.homePage)
 
+route.post('/register', Controller.register)
+
 route.use('/admin', adminRoute)
 
 route.use('/user', userRoute)
