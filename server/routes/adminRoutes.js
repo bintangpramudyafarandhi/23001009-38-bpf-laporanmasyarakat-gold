@@ -4,13 +4,15 @@ const AdminController = require('../controllers/AdminController')
 
 route.get('/', AdminController.homePage)
 
+route.post('/:id/laporan/:idLap', AdminController.balas)
+
 route.get('/dashboard')
 
 route.get('/masyarakat')
 
-route.get('/unresponded')
+route.get('/blm-balas')
 
-route.get('/responded')
+route.get('/selesai')
 
 route.get('/laporan')
 
