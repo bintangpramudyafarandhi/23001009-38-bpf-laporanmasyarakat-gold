@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <h1>Info Laporan</h1>
+
+    <h3>Nama Pengirim: <%= dataUser.nama %></h3>
+    <h3>NIK: <%= dataUser.nik %></h3>
+    <h3>Status Laporan: 
+        <% if (dataLaporan.status === false) { %>
+            Belum Dibalas
+        <% } else { %>
+            Sudah Dibalas
+        <% } %>
+    </h3>
+    <h3>Isi Laporan: <%= dataLaporan.isi_laporan %></h3>
+
+    <% if (typeof dataBalasan !== 'undefined' && typeof dataAdmin !== 'undefined') { %>
+        <br> <h1>Balasan</h1>
+
+        <h3>Isi Balasan: <%= dataBalasan.isi_balasan %></h3>
+        <h3>Dibalas Oleh: <%= dataAdmin.nama %></h3>
+        <h3>Nomor Telepon: <%= 0+dataAdmin.no_telp %></h3>
+        <h3>Alamat: <%= dataAdmin.alamat %></h3>
+        <h3>Dibalas Pada: <%= dataBalasan.tgl_balasan.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }) %></h3>
+    <% } %>
+
+    <br> <a href="/user/<%= dataUser.id %>/riwayat">kembali</a>
+</body>
+</html>

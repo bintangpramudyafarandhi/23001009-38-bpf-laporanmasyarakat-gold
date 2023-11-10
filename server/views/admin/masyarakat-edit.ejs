@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Edit Info Masyarakat</h1>
+
+        <% if (typeof errors !== 'undefined') { %>
+            <% errors.forEach(el => { %>
+                <h2 style="color: red;">! <%= el.message %></h2>
+            <% }) %>
+        <% } %>
+
+        <form action="/admin/<%= id %>/masyarakat/<%= data[0].id %>/edit" method="post">
+            <label for="nik">NIK</label> <br>
+            <input type="number" id="nik" name="nik" value="<%= data[0].nik %>" required> <br> <br>
+            <label for="nama">Nama Lengkap</label> <br>
+            <input type="text" id="nama" name="nama" value="<%= data[0].nama %>" required> <br> <br>
+            <label for="no_telp">No. Telp</label> <br>
+            <input type="number" id="no_telp" name="no_telp" value="<%= 0+data[0].no_telp %>" required> <br> <br>
+            <label for="alamat">Alamat</label> <br>
+            <input type="text" id="alamat" name="alamat" value="<%= data[0].alamat %>" required> <br> <br>
+            <button type="submit">Edit</button>
+        </form> <br>
+
+        <a href="/admin/<%= id %>/masyarakat">kembali</a>
+    </center>
+</body>
+</html>

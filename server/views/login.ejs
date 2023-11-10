@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Aplikasi Laporan Masyarakat Depok</h1> <br>
+        <h1>Login</h1>
+
+        <% if (typeof message !== 'undefined') { %>
+            <h3 style="color: green;"><%= message %></h3>
+        <% } %>
+
+        <% if (typeof errors !== 'undefined') { %>
+            <h3 style="color: red;">! <%= errors[0].message %></h3>
+        <% } %>
+
+        <form action="/" method="post">
+            <input type="number" id="nik" name="nik" placeholder="NIK" required> <br>
+            <input type="password" id="password" name="password" placeholder="Password"> <br> <br>
+            <button type="submit">Login</button>
+        </form> <br>
+
+        <p>Belum punya akun? Register <a href="/register">disini</a></p>
+        <p>Petugas login <a href="/login-petugas">disini</a></p>
+    </center>
+</body>
+</html>

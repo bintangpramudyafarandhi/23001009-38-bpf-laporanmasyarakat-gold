@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Laporan yang Belum Dibalas</h1> <br> <br>
+
+        <% if (data.length == 0) { %>
+            <h1>Tidak Ada Laporan yang Belum Dibalas!</h1>
+        <% } else { %>
+            <table border="2">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>NIK</th>
+                        <th>Nama</th>
+                        <th>Tanggal Masuk</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% i = 0 %>
+                    <% data.forEach(el => { %>
+                        <tr>
+                            <td><%= i+=1 %></td>
+                            <td><%= el.nik %></td>
+                            <td><%= el.nama %></td>
+                            <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
+                            <td><a href="laporan/<%= el.id_laporan %>">Info</a></td>
+                        </tr>                  
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+        
+        <br> <br> <a href="/admin/<%= id %>">kembali</a>
+    </center>
+</body>
+</html>

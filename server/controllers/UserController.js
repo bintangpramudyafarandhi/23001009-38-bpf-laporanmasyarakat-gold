@@ -1,60 +1,157 @@
 const db = require('../db/db')
 
 class UserController {
-    static homePage (req, res) {
-        res.send('user')
+    static async homePage (req, res) {
+        try {
+            const data = await db('masyarakat').where({id: req.params.id}).select('id','nama')
+            res.render('user/index', {
+                title: 'Laporan Masyarakat Depok',
+                data
+            })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
     }
 
-    static async laporan (req,res) {
+    static async profil (req, res) {
         try {
-            const {isiLaporan} = req.body
+            const data = await db('masyarakat').where({id: req.params.id})
 
-            const newLaporan = await db('laporan').insert({
-                tgl_laporan: new Date(),
-                isi_laporan: isiLaporan,
-                status: false,
-                id_masyarakat: req.params.id
+            res.render('user/profile' , {
+                title: 'Profil Anda',
+                data: data[0],
+                id: data[0].id
             })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
 
-            if (newLaporan) {
-                res.status(201).json({'Message': 'Laporan Berhasil Dibuat! Silahkan Tunggu Balasan Dari Petugas Kami'})
+    static async profilEditGet (req,res) {
+        try {
+            const data = await db('masyarakat').where({id: req.params.id})
+
+            res.render('user/profile-edit', {
+                title: 'Edit Profil',
+                data: data[0]
+            })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})   
+        }
+    }
+
+    static async profilEditPost (req, res) {
+        try {
+            const {nik, nama, no_telp, alamat} = req.body
+            const errors = []
+
+            const nikDupe = await db('masyarakat').whereNot({id: req.params.id}).where({nik : nik.replace(/\s+/g,'')})
+            const noTelpDupe = await db('masyarakat').whereNot({id: req.params.id}).where({no_telp: no_telp.replace(/\s+/g,'').substring(1)})
+
+            if (nikDupe.length > 0) {
+                errors.push({message: 'NIK Tidak Tersedia'})
+            }
+
+            if (nik.replace(/\s+/g,'').length != 16) {
+                errors.push({message: 'NIK Tidak Valid'})
+            }
+
+            if (noTelpDupe.length > 0) {
+                errors.push({message: 'Nomor Telepon Sudah Terdaftar'})
+            }
+
+            if (no_telp.replace(/\s+/g,'').length < 9 || no_telp.replace(/\s+/g,'').length > 12) {
+                errors.push({message: 'Nomor Telepon Tidak Valid'})
+            }
+
+            if (errors.length == 0) {
+                await db('masyarakat').where({id: req.params.id}).update({
+                    nik: nik.replace(/\s+/g,''),
+                    nama,
+                    no_telp: no_telp.replace(/\s+/g,''),
+                    alamat
+                })
+                res.redirect(`/user/${req.params.id}/profil`)
+            } else {
+                const data = await db('masyarakat').where({id: req.params.id})
+                res.render('user/profile-edit', {
+                    title: 'Edit Profil',
+                    data: data[0],
+                    errors
+                })
             }
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }
     }
 
-    static async profile (req, res) {
+    static async laporGet (req,res) {
         try {
-            const prfl = await db('masyarakat').where({
+            res.render('user/lapor', {
+                title: 'Tulis Laporan',
                 id: req.params.id
-            }).select('*')
-
-            res.status(200).json(prfl)
+            })
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }
     }
 
-    static async edit (req, res) {
+    static async laporPost (req,res) {
         try {
-            const {nama, notelp, alamat} = req.body
+            const {isi_laporan} = req.body
 
-            const edt = await db('masyarakat').where({
+            await db('laporan').insert({
+                tgl_laporan: new Date(),
+                isi_laporan,
+                status: false,
+                id_masyarakat: req.params.id
+            })
+
+            res.render('user/lapor', {
+                title: 'Tulis Laporan',
+                id: req.params.id,
+                message: 'Laporan Terkirim, Silahkan Tunggu Balasan dari Petugas'
+            })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async riwayat (req,res) {
+        try {
+            const data = await db('laporan').where({id_masyarakat: req.params.id})
+
+            res.render('user/riwayat', {
+                title: 'Riwayat Laporan',
+                data,
                 id: req.params.id
-            }).update({
-                nama,
-                no_telp: notelp,
-                alamat,
-                updated_at: new Date()
-            }).returning('*')
+            })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
 
-            const newData = await db('masyarakat').where({
-                id: req.params.id
-            }).select('*')
+    static async riwayatDetail (req,res) {
+        try {
+            const dataLaporan = await db('laporan').where({id_laporan: req.params.idLap})
+            const dataBalasan = await db('balasan').where({id_laporan: req.params.idLap})
+            const dataUser = await db('masyarakat').where({id: req.params.id})
 
-            if (edt) {
-                res.status(200).json(edt)
+            if (dataBalasan.length > 0) {
+                const dataAdmin = await db('petugas').where({id: dataBalasan[0].id_petugas})
+                res.render('user/riwayat-detail', {
+                    title: 'Info Laporan',
+                    dataLaporan: dataLaporan[0],
+                    dataBalasan: dataBalasan[0],
+                    dataUser: dataUser[0],
+                    dataAdmin: dataAdmin[0]
+                })
+            } else {
+                res.render('user/riwayat-detail', {
+                    title: 'Info Laporan',
+                    dataLaporan: dataLaporan[0],
+                    dataUser: dataUser[0]
+                })
             }
         } catch (error) {
             res.status(500).json({'Error': error.message})

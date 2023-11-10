@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Edit Profil</h1>
+
+        <% if (typeof errors !== 'undefined') { %>
+            <% errors.forEach(el => { %>
+             <h2 style="color: red;">! <%= el.message %></h2>
+            <% }) %>
+        <% } %> 
+
+        <form action="/admin/<%= id %>/profil/edit" method="post">
+            <% data.forEach(el => { %>
+                <label for="username">Username</label> <br>
+                <input type="text" id="username" name="username" value="<%= el.username %>" required> <br> <br>
+                <label for="nama">Nama Lengkap</label> <br>
+                <input type="text" id="nama" name="nama" value="<%= el.nama %>" required> <br> <br>
+                <label for="no_telp">No. Telp</label> <br>
+                <input type="number" id="no_telp" name="no_telp" value="<%= 0+el.no_telp %>" required> <br> <br>
+                <label for="alamat">Alamat</label> <br>
+                <input type="text" id="alamat" name="alamat" value="<%= el.alamat %>" required> <br> <br>
+                <button type="submit">Edit</button>
+            <% }) %>
+        </form> <br>
+        <a href="/admin/<%= data[0].id %>/profil">kembali</a>
+    </center>
+</body>
+</html>

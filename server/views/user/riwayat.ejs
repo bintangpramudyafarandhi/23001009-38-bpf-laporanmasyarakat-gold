@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Riwayat Laporan</h1>
+
+        <% if (data.length == 0) { %>
+         <h2>Anda Belum Membuat Laporan!</h2>
+        <% } else { %>
+            <table border="2">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Isi Laporan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% i = 0 %>
+                    <% data.forEach(el => { %>
+                        <tr>
+                            <td><%= i+=1 %></td>
+                            <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
+                            <td><%= el.isi_laporan %></td>
+                            <td>
+                                <% if (el.status === false) { %>
+                                    Belum Dibalas
+                                <% } else { %>
+                                    Sudah Dibalas
+                                <% } %>
+                            </td>
+                            <td><a href="riwayat/<%= el.id_laporan %>">Info</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+        <br> <br> <a href="/user/<%= id %>">kembali</a>
+    </center>
+</body>
+</html>

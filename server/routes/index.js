@@ -5,8 +5,13 @@ const userRoute = require('./userRoutes')
 const Controller = require('../controllers/Controller')
 
 route.get('/', Controller.homePage)
+route.post('/', Controller.login)
 
-route.post('/register', Controller.register)
+route.get('/login-petugas', Controller.loginPetugasGet)
+route.post('/login-petugas', Controller.loginPetugasPost)
+
+route.get('/register', Controller.registerGet)
+route.post('/register', Controller.registerPost)
 
 route.use('/admin', adminRoute)
 

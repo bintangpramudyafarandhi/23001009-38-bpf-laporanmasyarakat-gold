@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <h1>Selamat Datang, <%= data[0].nama %></h1>
+    <a href="/user/<%= data[0].id %>/profil">profil</a>
+    <a href="/user/<%= data[0].id %>/lapor">lapor</a>
+    <a href="/user/<%= data[0].id %>/riwayat">riwayat</a>
+    <br> <a href="/">logout</a>
+</body>
+</html>

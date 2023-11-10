@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <h1>Profil Anda</h1>
+
+    <h3>NIK: <%= data.nik %></h3>
+    <h3>Nama Lengkap: <%= data.nama %></h3>
+    <h3>Nomor Telepon: <%= 0+data.no_telp %></h3>
+    <h3>Alamat: <%= data.alamat %></h3>
+
+    <br> <a href="/user/<%= id %>">kembali</a>
+    <a href="profil/edit">edit profil</a>
+</body>
+</html>

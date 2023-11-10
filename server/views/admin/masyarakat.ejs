@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Daftar Masyarakat</h1> <br> <br>
+
+        <% if (data.length == 0) { %>
+            <h1>Tidak ada Masyarakat!</h1>
+        <% } else { %>
+            <table border="2">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>NIK</th>
+                        <th>Nama</th>
+                        <th>No. Telp</th>
+                        <th>Alamat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% i = 0 %>
+                    <% data.forEach(el => { %>
+                        <tr>
+                            <td><%= i += 1 %></td>
+                            <td><%= el.nik %></td>
+                            <td><%= el.nama %></td>
+                            <td><%= 0+el.no_telp %></td>
+                            <td><%= el.alamat %></td>
+                            <td>
+                                <a href="/admin/<%= id %>/masyarakat/<%= el.id %>">Info</a>
+                                <a href="/admin/<%= id %>/masyarakat/<%= el.id %>/edit">Edit</a>
+                                <a href="/admin/<%= id %>/masyarakat/<%= el.id %>/delete" onclick="return confirm('Apakah Anda Ingin Menghapus <%=el.nama%>?')">Hapus</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+        <br> <br> <a href="/admin/<%= id %>">kembali</a>
+    </center>
+</body>
+</html>

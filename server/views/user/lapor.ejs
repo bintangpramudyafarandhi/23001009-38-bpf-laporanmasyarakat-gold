@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Tulis Laporan</h1>
+
+        <% if (typeof message !== 'undefined') { %>
+            <h3 style="color: green;">! <%= message %></h3>
+        <% } %>
+
+        <form action="/user/<%= id %>/lapor" method="post">
+            <input type="text" name="isi_laporan" id="isi_laporan" placeholder="Tulis Laporan Disini" required> <br> <br>
+            <button type="submit">Kirim</button>
+        </form> <br>
+
+        <a href="/user/<%= id %>">kembali</a>
+    </center>
+</body>
+</html>

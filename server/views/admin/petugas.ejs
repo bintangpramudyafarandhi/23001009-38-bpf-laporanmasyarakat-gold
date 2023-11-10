@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Daftar Petugas</h1>
+
+        <a href="petugas/tambah">Tambah Petugas</a> <br> <br>
+
+        <% if (data.length == 0) { %>
+            <h1>Tidak Ada Petugas Lain!</h1>
+        <% } else { %>
+            <table border="2">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>No. Telp</th>
+                        <th>Alamat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% i = 0 %>
+                    <% data.forEach(el => { %>
+                        <tr>
+                            <td><%= i+=1 %></td>
+                            <td><%= el.username %></td>
+                            <td><%= el.nama %></td>
+                            <td><%= 0+el.no_telp %></td>
+                            <td><%= el.alamat %></td>
+                            <td><a href="petugas/<%= el.id %>">Info</a></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+        
+        <br><br>
+        <a href="/admin/<%= id %>">kembali</a>
+    </center>
+</body>
+</html>

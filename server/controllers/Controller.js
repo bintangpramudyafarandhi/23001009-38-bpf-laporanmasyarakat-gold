@@ -2,25 +2,135 @@ const db = require('../db/db')
 
 class Controller {
     static homePage (req, res) {
-        res.send('home')
+        try {
+            res.render('login', {
+                title: 'Laporan Masyarakat Depok',
+                message: req.query.msg
+            })
+        } catch (error) {
+            res.status(500).json({'Error' : error.message})
+        }
     }
 
-    static async register (req,res) {
+    static async login (req,res) {
         try {
-            const {nik, nama, password, notelp, alamat} = req.body
+            const {nik, password} = req.body
+            const errors = []
 
-            const insert = await db('masyarakat').insert({
-                nik,
-                nama,
-                password,
-                no_telp: notelp,
-                alamat,
-                created_at: new Date(),
-                updated_at: new Date()
+            const find = await db('masyarakat').where({nik: nik})
+            if (find.length > 0) {
+                const passCheck = find[0].password
+                if (passCheck == password) {
+                    res.redirect(`/user/${find[0].id}`)
+                } else {
+                    errors.push({message: 'NIK atau Password Salah'})
+                    res.render('login', {
+                        title: 'Laporan Masyarakat Depok',
+                        errors
+                    })
+                }
+            } else {
+                errors.push({message: 'NIK atau Password Salah'})
+                res.render('login', {
+                    title: 'Laporan Masyarakat Depok',
+                    errors
+                })
+            }
+        } catch (error) {
+            res.status(500).json({'Error' : error.message})
+        }
+    }
+
+    static async loginPetugasGet (req,res) {
+        try {
+            res.render('login-petugas', {
+                title: 'Login Petugas'
             })
+        } catch (error) {
+            res.status(500).json({'Error' : error.message})
+        }
+    }
 
-            if (insert) {
-                res.status(201).json({'Message': 'Registrasi Berhasil!'})
+    static async loginPetugasPost (req,res) {
+        try {
+            const {username, password} = req.body
+            const errors = []
+
+            const find = await db('petugas').where({username: username})
+            if (find.length > 0) {
+                const passCheck = find[0].password
+                if (passCheck == password) {
+                    res.redirect(`/admin/${find[0].id}`)
+                } else {
+                    errors.push({message: 'Username atau Password Salah'})
+                    res.render('login-petugas', {
+                        title: 'Login Petugas',
+                        errors
+                    })
+                }
+            } else {
+                errors.push({message: 'Username atau Password Salah'})
+                res.render('login-petugas', {
+                    title: 'Login Petugas',
+                    errors
+                })
+            }
+        } catch (error) {
+            res.status(500).json({'Error' : error.message})
+        }
+    }
+
+    static async registerGet (req,res) {
+        try {
+            res.render('register', {
+                title: 'Halaman Registrasi',
+            })
+        } catch (error) {
+            res.status(500).json({'Error' : error.message})
+        }
+    }
+
+    static async registerPost (req,res) {
+        try {
+            const {nik, nama, password, no_telp, alamat} = req.body
+
+            const errors = []
+
+            const nikDupe = await db('masyarakat').where({nik : nik.replace(/\s+/g,'')})
+            const noTelpDupe = await db('masyarakat').where({no_telp: no_telp.replace(/\s+/g,'').substring(1)})
+
+            if (nikDupe.length > 0) {
+                errors.push({message: 'NIK Sudah Terdaftar'})
+            }
+
+            if (nik.replace(/\s+/g,'').length != 16) {
+                errors.push({message: 'NIK Tidak Valid'})
+            }
+
+            if (noTelpDupe.length > 0) {
+                errors.push({message: 'Nomor Telepon Sudah Terdaftar'})
+            }
+
+            if (no_telp.replace(/\s+/g,'').length < 9 || no_telp.replace(/\s+/g,'').length > 12) {
+                errors.push({message: 'Nomor Telepon Tidak Valid'})
+            }
+
+            if (errors.length == 0) {
+                await db('masyarakat').insert({
+                    nik,
+                    nama,
+                    password,
+                    no_telp,
+                    alamat,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                })
+                res.redirect('/?msg=Registrasi Berhasil! Silahkan Login')
+            } else {
+                res.render('register', {
+                    title: 'Halaman Register',
+                    errors
+                })
             }
         } catch (error) {
             res.status(500).json({'Error' : error.message})

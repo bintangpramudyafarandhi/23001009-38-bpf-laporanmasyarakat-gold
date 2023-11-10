@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <h1>Info Laporan</h1>
+
+    <h3><b>Nama Pengirim:</b> <%= dataUser.nama %></h3>
+    <h3><b>NIK:</b> <%= dataUser.nik %></h3>
+    <h3><b>Tanggal Masuk:</b> <%= dataLap.tgl_laporan.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }) %></h3>
+    <h3><b>Isi Laporan:</b> <%= dataLap.isi_laporan %></h3> <br>
+
+    <h1>Balasan</h1>
+    <h3><b>Isi Balasan:</b> <%= dataBalas.isi_balasan %></h3>
+    <h3>Dibalas Oleh: <%= dataAdmin.nama %></h3>
+    <h3>Nomor Telepon: <%= 0+dataAdmin.no_telp %></h3>
+    <h3>Alamat: <%= dataAdmin.alamat %></h3>
+    <h3>Dibalas Pada: <%= dataBalas.tgl_balasan.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }) %> %></h3>
+
+    <a href="/admin/<%= id %>/selesai">kembali</a>
+</body>
+</html>

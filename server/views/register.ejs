@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <center>
+        <h1>Aplikasi Laporan Masyarakat Depok</h1> <br>
+        <h1>Register</h1>
+        <% if (typeof errors !== 'undefined') { %>
+            <% errors.forEach(el => { %>
+                <h3 style="color: red;">! <%= el.message %></h3>
+            <% }) %>
+        <% } %>
+        <form action="/register" method="post">
+            <input type="number" id="nik" name="nik" placeholder="NIK" required> <br>
+            <input type="text" id="nama" name="nama" placeholder="Nama Lengkap" required> <br>
+            <input type="password" id="password" name="password" placeholder="Password" required> <br>
+            <input type="number" id="no_telp" name="no_telp" placeholder="08XXXXXXXXXX" required> <br>
+            <input type="text" id="alamat" name="alamat" placeholder="Alamat" required> <br> <br>
+            <button type="submit">Register</button>
+        </form> <br>
+        <a href="/">back</a>
+    </center>
+</body>
+</html>

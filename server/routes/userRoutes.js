@@ -4,12 +4,14 @@ const UserController = require('../controllers/UserController')
 
 route.get('/:id', UserController.homePage)
 
-route.post('/:id', UserController.laporan)
+route.get('/:id/profil', UserController.profil)
+route.get('/:id/profil/edit', UserController.profilEditGet)
+route.post('/:id/profil/edit', UserController.profilEditPost)
 
-route.get('/:id/profile', UserController.profile)
+route.get('/:id/lapor', UserController.laporGet)
+route.post('/:id/lapor', UserController.laporPost)
 
-route.post('/:id/profile/edit', UserController.edit)
-
-route.get('/riwayat')
+route.get('/:id/riwayat', UserController.riwayat)
+route.get('/:id/riwayat/:idLap', UserController.riwayatDetail)
 
 module.exports = route
