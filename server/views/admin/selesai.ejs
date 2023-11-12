@@ -30,14 +30,14 @@
                             <td><%= el.nik %></td>
                             <td><%= el.nama %></td>
                             <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
-                            <td><a href="/admin/<%= id %>/selesai/<%= el.id_laporan %>">detail</a></td>
+                            <td><a href="/admin/selesai/<%= el.id_laporan %>">detail</a></td>
                         </tr>                  
                     <% }); %>
                 </tbody>
             </table>
         <% } %>
         
-        <br> <br> <a href="/admin/<%= id %>">kembali</a>
+        <br> <br> <a href="/admin">kembali</a>
     </center>
 </body>
 </html>

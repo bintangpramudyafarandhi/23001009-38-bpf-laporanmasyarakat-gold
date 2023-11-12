@@ -4,17 +4,17 @@ const adminRoute = require('./adminRoutes')
 const userRoute = require('./userRoutes')
 const Controller = require('../controllers/Controller')
 
-route.get('/', Controller.homePage)
+route.get('/', Controller.isLoggedOut, Controller.homePage)
 route.post('/', Controller.login)
 
-route.get('/login-petugas', Controller.loginPetugasGet)
+route.get('/login-petugas', Controller.isLoggedOut, Controller.loginPetugasGet)
 route.post('/login-petugas', Controller.loginPetugasPost)
 
-route.get('/register', Controller.registerGet)
+route.get('/register', Controller.isLoggedOut, Controller.registerGet)
 route.post('/register', Controller.registerPost)
 
-route.use('/admin', adminRoute)
+route.use('/user', Controller.isLoggedInUser, userRoute)
 
-route.use('/user', userRoute)
+route.use('/admin', Controller.isLoggedInAdmin, adminRoute)
 
 module.exports = route

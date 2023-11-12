@@ -15,7 +15,7 @@
             <% }) %>
         <% } %>
 
-        <form action="/admin/<%= id %>/petugas/tambah" method="post">
+        <form action="/admin/petugas/tambah" method="post">
             <input type="text" id="username" name="username" placeholder="Username" required> <br>
             <input type="text" id="nama" name="nama" placeholder="Nama Lengkap" required> <br>
             <input type="number" id="no_telp" name="no_telp" placeholder="08XXXXXXXXXX" required> <br>
@@ -23,7 +23,7 @@
             <button type="submit">Kirim</button>
         </form> <br> <br>
 
-        <a href="/admin/<%= id %>/petugas">kembali</a>
+        <a href="/admin/petugas">kembali</a>
     </center>
 </body>
 </html>

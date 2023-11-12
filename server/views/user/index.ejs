@@ -6,10 +6,10 @@
     <title><%= title %></title>
 </head>
 <body>
-    <h1>Selamat Datang, <%= data[0].nama %></h1>
-    <a href="/user/<%= data[0].id %>/profil">profil</a>
-    <a href="/user/<%= data[0].id %>/lapor">lapor</a>
-    <a href="/user/<%= data[0].id %>/riwayat">riwayat</a>
-    <br> <a href="/">logout</a>
+    <h1>Selamat Datang, <%= data[0].nama %>!</h1>
+    <a href="/user/profil">profil</a>
+    <a href="/user/lapor">lapor</a>
+    <a href="/user/riwayat">riwayat</a>
+    <br> <a href="/user/logout" onclick="return confirm('Apakah Anda Ingin Logout?')">logout</a>
 </body>
 </html>

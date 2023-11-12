@@ -7,16 +7,16 @@
     <title><%= title %></title>
 </head>
 <body>
-    <h1>Selamat Datang <%= nama %></h1>
+    <h1>Selamat Datang, <%= nama %>!</h1>
 
-    <a href="/admin/<%= id %>/profil">profil</a>
-    <a href="/admin/<%= id %>/dasbor">dasbor</a>
-    <a href="/admin/<%= id %>/masyarakat">masyarakat</a>
-    <a href="/admin/<%= id %>/petugas">petugas</a>
-    <a href="/admin/<%= id %>/laporan">belum dibalas</a>
-    <a href="/admin/<%= id %>/selesai">sudah dibalas</a>
-    <a href="/admin/<%= id %>/riwayat">riwayat</a>
+    <a href="/admin/profil">profil</a>
+    <a href="/admin/dasbor">dasbor</a>
+    <a href="/admin/masyarakat">masyarakat</a>
+    <a href="/admin/petugas">petugas</a>
+    <a href="/admin/laporan">belum dibalas</a>
+    <a href="/admin/selesai">sudah dibalas</a>
+    <a href="/admin/riwayat">riwayat</a>
 
-    <br> <a href="/">logout</a>
+    <br> <a href="/admin/logout" onclick="return confirm('Apakah Anda Ingin Logout?')">logout</a>
 </body>
 </html>

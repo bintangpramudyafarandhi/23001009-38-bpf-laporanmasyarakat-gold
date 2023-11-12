@@ -15,7 +15,7 @@
             <% }) %>
         <% } %>
 
-        <form action="/user/<%= data.id %>/profil/edit" method="post">
+        <form action="/user/profil/edit" method="post">
             <label for="nik">NIK</label> <br>
             <input type="number" id="nik" name="nik" value="<%= data.nik %>" required> <br> <br>
             <label for="nama">Nama Lengkap</label> <br>
@@ -27,7 +27,7 @@
             <button type="submit">Edit</button>
         </form> <br>
 
-        <a href="/user/<%= data.id %>/profil">kembali</a>
+        <a href="/user/profil">kembali</a>
     </center>
 </body>
 </html>

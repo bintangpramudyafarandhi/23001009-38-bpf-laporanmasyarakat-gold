@@ -1,6 +1,43 @@
 const db = require('../db/db')
+const bcrypt = require('bcrypt')
 
 class Controller {
+    static isLoggedInUser (req,res,next) {
+        if (req.session.auth && req.session.role == 'user') {
+            next()
+        } else {
+            if (req.session.role == 'admin') {
+                res.redirect('/admin')
+            } else {
+                res.redirect('/')
+            }
+        } 
+    }
+
+    static isLoggedInAdmin (req,res,next) {
+        if (req.session.role == 'admin') {
+            next()
+        } else {
+            if (req.session.role == 'user') {
+                res.redirect('/user')
+            } else {
+                res.redirect('/')
+            }
+        }
+    }
+
+    static isLoggedOut (req,res,next) {
+        if (!req.session.auth) {
+            next()
+        } else {
+            if (req.session.role == 'user') {
+                res.redirect('/user')
+            } else {
+                res.redirect('/admin')
+            }
+        }
+    }
+
     static homePage (req, res) {
         try {
             res.render('login', {
@@ -18,10 +55,14 @@ class Controller {
             const errors = []
 
             const find = await db('masyarakat').where({nik: nik})
+
             if (find.length > 0) {
-                const passCheck = find[0].password
-                if (passCheck == password) {
-                    res.redirect(`/user/${find[0].id}`)
+                const passCheck = await bcrypt.compare(password, find[0].password)
+                if (passCheck) {
+                    req.session.auth = true
+                    req.session.role = 'user'
+                    req.session.aidi = find[0].id
+                    res.redirect(`/user`)
                 } else {
                     errors.push({message: 'NIK atau Password Salah'})
                     res.render('login', {
@@ -60,7 +101,10 @@ class Controller {
             if (find.length > 0) {
                 const passCheck = find[0].password
                 if (passCheck == password) {
-                    res.redirect(`/admin/${find[0].id}`)
+                    req.session.auth = true
+                    req.session.role = 'admin'
+                    req.session.aidi = find[0].id
+                    res.redirect(`/admin`)
                 } else {
                     errors.push({message: 'Username atau Password Salah'})
                     res.render('login-petugas', {
@@ -117,10 +161,10 @@ class Controller {
 
             if (errors.length == 0) {
                 await db('masyarakat').insert({
-                    nik,
+                    nik: nik.replace(/\s+/g,''),
                     nama,
-                    password,
-                    no_telp,
+                    password: await bcrypt.hash(password,10),
+                    no_telp: no_telp.replace(/\s+/g,''),
                     alamat,
                     created_at: new Date(),
                     updated_at: new Date()

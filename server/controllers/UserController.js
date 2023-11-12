@@ -1,9 +1,10 @@
 const db = require('../db/db')
+const bcrypt = require('bcrypt')
 
 class UserController {
     static async homePage (req, res) {
         try {
-            const data = await db('masyarakat').where({id: req.params.id}).select('id','nama')
+            const data = await db('masyarakat').where({id: req.session.aidi}).select('nama')
             res.render('user/index', {
                 title: 'Laporan Masyarakat Depok',
                 data
@@ -15,12 +16,11 @@ class UserController {
 
     static async profil (req, res) {
         try {
-            const data = await db('masyarakat').where({id: req.params.id})
+            const data = await db('masyarakat').where({id: req.session.aidi})
 
             res.render('user/profile' , {
                 title: 'Profil Anda',
-                data: data[0],
-                id: data[0].id
+                data: data[0]
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -29,7 +29,7 @@ class UserController {
 
     static async profilEditGet (req,res) {
         try {
-            const data = await db('masyarakat').where({id: req.params.id})
+            const data = await db('masyarakat').where({id: req.session.aidi})
 
             res.render('user/profile-edit', {
                 title: 'Edit Profil',
@@ -45,8 +45,8 @@ class UserController {
             const {nik, nama, no_telp, alamat} = req.body
             const errors = []
 
-            const nikDupe = await db('masyarakat').whereNot({id: req.params.id}).where({nik : nik.replace(/\s+/g,'')})
-            const noTelpDupe = await db('masyarakat').whereNot({id: req.params.id}).where({no_telp: no_telp.replace(/\s+/g,'').substring(1)})
+            const nikDupe = await db('masyarakat').whereNot({id: req.session.aidi}).where({nik : nik.replace(/\s+/g,'')})
+            const noTelpDupe = await db('masyarakat').whereNot({id: req.session.aidi}).where({no_telp: no_telp.replace(/\s+/g,'').substring(1)})
 
             if (nikDupe.length > 0) {
                 errors.push({message: 'NIK Tidak Tersedia'})
@@ -65,15 +65,16 @@ class UserController {
             }
 
             if (errors.length == 0) {
-                await db('masyarakat').where({id: req.params.id}).update({
+                await db('masyarakat').where({id: req.session.aidi}).update({
                     nik: nik.replace(/\s+/g,''),
                     nama,
                     no_telp: no_telp.replace(/\s+/g,''),
-                    alamat
+                    alamat,
+                    updated_at: new Date()
                 })
-                res.redirect(`/user/${req.params.id}/profil`)
+                res.redirect(`/user/profil`)
             } else {
-                const data = await db('masyarakat').where({id: req.params.id})
+                const data = await db('masyarakat').where({id: req.session.aidi})
                 res.render('user/profile-edit', {
                     title: 'Edit Profil',
                     data: data[0],
@@ -85,11 +86,69 @@ class UserController {
         }
     }
 
+    static async passwordGet (req,res) {
+        try {
+            res.render('user/password', {
+                title: 'Ubah Password',
+                pass: false
+            })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async passwordPost (req,res) {
+        try {
+            const {password} = req.body
+
+            const oldPassword = await db('masyarakat').where({id: req.session.aidi}).select('password')
+            const passCheck = await bcrypt.compare(password, oldPassword[0].password)
+
+            if (passCheck) {
+                res.render('user/password', {
+                    title: 'Ubah Password',
+                    pass: true
+                })
+            } else {
+                res.render('user/password', {
+                    title: 'Ubah Password',
+                    pass: false,
+                    errors: 'Password Salah'
+                })
+            }
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async passwordPostNew (req,res) {
+        try {
+            const {password} = req.body
+
+            const spaceCheck = /\s/.test(password)
+
+            if (spaceCheck) {
+                res.render('user/password', {
+                    title: 'Ubah Password',
+                    pass: true,
+                    errors: 'Password Tidak Bisa Mengandung Spasi'
+                })
+            } else {
+                await db('masyarakat').where({id: req.session.aidi}).update({
+                    password: await bcrypt.hash(password, 10),
+                    updated_at: new Date()
+                })
+                res.redirect('/user/profil')
+            }
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
     static async laporGet (req,res) {
         try {
             res.render('user/lapor', {
-                title: 'Tulis Laporan',
-                id: req.params.id
+                title: 'Tulis Laporan'
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -104,12 +163,11 @@ class UserController {
                 tgl_laporan: new Date(),
                 isi_laporan,
                 status: false,
-                id_masyarakat: req.params.id
+                id_masyarakat: req.session.aidi
             })
 
             res.render('user/lapor', {
                 title: 'Tulis Laporan',
-                id: req.params.id,
                 message: 'Laporan Terkirim, Silahkan Tunggu Balasan dari Petugas'
             })
         } catch (error) {
@@ -119,12 +177,11 @@ class UserController {
 
     static async riwayat (req,res) {
         try {
-            const data = await db('laporan').where({id_masyarakat: req.params.id})
+            const data = await db('laporan').where({id_masyarakat: req.session.aidi})
 
             res.render('user/riwayat', {
                 title: 'Riwayat Laporan',
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -135,7 +192,7 @@ class UserController {
         try {
             const dataLaporan = await db('laporan').where({id_laporan: req.params.idLap})
             const dataBalasan = await db('balasan').where({id_laporan: req.params.idLap})
-            const dataUser = await db('masyarakat').where({id: req.params.id})
+            const dataUser = await db('masyarakat').where({id: req.session.aidi})
 
             if (dataBalasan.length > 0) {
                 const dataAdmin = await db('petugas').where({id: dataBalasan[0].id_petugas})
@@ -153,6 +210,15 @@ class UserController {
                     dataUser: dataUser[0]
                 })
             }
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async logout (req,res) {
+        try {
+            req.session.destroy()
+            res.redirect('/')
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }

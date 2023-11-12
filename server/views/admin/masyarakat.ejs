@@ -34,16 +34,16 @@
                             <td><%= 0+el.no_telp %></td>
                             <td><%= el.alamat %></td>
                             <td>
-                                <a href="/admin/<%= id %>/masyarakat/<%= el.id %>">Info</a>
-                                <a href="/admin/<%= id %>/masyarakat/<%= el.id %>/edit">Edit</a>
-                                <a href="/admin/<%= id %>/masyarakat/<%= el.id %>/delete" onclick="return confirm('Apakah Anda Ingin Menghapus <%=el.nama%>?')">Hapus</a>
+                                <a href="/admin/masyarakat/<%= el.id %>">Info</a>
+                                <a href="/admin/masyarakat/<%= el.id %>/edit">Edit</a>
+                                <a href="/admin/masyarakat/<%= el.id %>/delete" onclick="return confirm('Apakah Anda Ingin Menghapus <%=el.nama%>?')">Hapus</a>
                             </td>
                         </tr>
                     <% }); %>
                 </tbody>
             </table>
         <% } %>
-        <br> <br> <a href="/admin/<%= id %>">kembali</a>
+        <br> <br> <a href="/admin">kembali</a>
     </center>
 </body>
 </html>

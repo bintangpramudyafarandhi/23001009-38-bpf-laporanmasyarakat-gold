@@ -14,11 +14,11 @@
     <h3>Isi Laporan: <%= dataLap[0].isi_laporan %></h3> <br>
 
     <h1>Balas</h1>
-    <form action="/admin/<%= id %>/laporan/<%= dataLap[0].id_laporan %>" method="post">
+    <form action="/admin/laporan/<%= dataLap[0].id_laporan %>" method="post">
         <input type="text" id="isi_balasan" name="isi_balasan" placeholder="Isi Balasan" required> <br> <br>
         <button type="submit">Kirim</button>
     </form> <br> <br>
 
-    <a href="/admin/<%= id %>/laporan">kembali</a>
+    <a href="/admin/laporan">kembali</a>
 </body>
 </html>

@@ -2,16 +2,21 @@ const express = require('express')
 const route = express.Router()
 const UserController = require('../controllers/UserController')
 
-route.get('/:id', UserController.homePage)
+route.get('/', UserController.homePage)
 
-route.get('/:id/profil', UserController.profil)
-route.get('/:id/profil/edit', UserController.profilEditGet)
-route.post('/:id/profil/edit', UserController.profilEditPost)
+route.get('/profil', UserController.profil)
+route.get('/profil/edit', UserController.profilEditGet)
+route.post('/profil/edit', UserController.profilEditPost)
+route.get('/profil/password', UserController.passwordGet)
+route.post('/profil/password', UserController.passwordPost)
+route.post('/profil/password/baru', UserController.passwordPostNew)
 
-route.get('/:id/lapor', UserController.laporGet)
-route.post('/:id/lapor', UserController.laporPost)
+route.get('/lapor', UserController.laporGet)
+route.post('/lapor', UserController.laporPost)
 
-route.get('/:id/riwayat', UserController.riwayat)
-route.get('/:id/riwayat/:idLap', UserController.riwayatDetail)
+route.get('/riwayat', UserController.riwayat)
+route.get('/riwayat/:idLap', UserController.riwayatDetail)
+
+route.get('/logout', UserController.logout)
 
 module.exports = route

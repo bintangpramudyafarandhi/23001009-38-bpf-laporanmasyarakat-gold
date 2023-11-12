@@ -3,12 +3,11 @@ const db = require("../db/db")
 class AdminController {
     static async homePage (req, res) {
         try {
-            const data = await db('petugas').where({id: req.params.id}).select('nama', 'id')
+            const data = await db('petugas').where({id: req.session.aidi}).select('nama')
 
             res.render('admin/index', {
                 title: 'Halaman Petugas',
-                nama: data[0].nama,
-                id: data[0].id
+                nama: data[0].nama
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -17,12 +16,11 @@ class AdminController {
 
     static async profile (req,res) {
         try {
-            const data = await db('petugas').where({id: req.params.id}).select('*')
+            const data = await db('petugas').where({id: req.session.aidi})
 
             res.render('admin/profile', {
                 title: 'Profil Anda',
-                profile: data[0],
-                id: data[0].id
+                profile: data[0]
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -31,11 +29,10 @@ class AdminController {
 
     static async editProfileGet (req,res) {
         try {
-            const data = await db('petugas').where({id: req.params.id})
+            const data = await db('petugas').where({id: req.session.aidi})
             res.render('admin/edit-profile', {
                 title: 'Edit Profil',
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -47,8 +44,8 @@ class AdminController {
             const {username, nama, no_telp, alamat} = req.body
             const errors = []
 
-            const usernameDupe = await db('petugas').whereNot({id: req.params.id}).where({username: username.replace(/\s+/g,'').toLowerCase()})
-            const noTelpDupe = await db('petugas').whereNot({id: req.params.id}).where({no_telp: no_telp.replace(/\s+/g,'').substring(1)})
+            const usernameDupe = await db('petugas').whereNot({id: req.session.aidi}).where({username: username.replace(/\s+/g,'').toLowerCase()})
+            const noTelpDupe = await db('petugas').whereNot({id: req.session.aidi}).where({no_telp: no_telp.replace(/\s+/g,'').substring(1)})
 
             if (usernameDupe.length > 0) {
                 errors.push({message: 'Username Tidak Tersedia'})
@@ -64,7 +61,7 @@ class AdminController {
 
             if (errors.length == 0) {
                 await db('petugas').where({
-                    id: req.params.id
+                    id: req.session.aidi
                 }).update({
                     username: username.replace(/\s+/g,'').toLowerCase(),
                     nama,
@@ -73,15 +70,72 @@ class AdminController {
                     updated_at: new Date()
                 })
 
-                res.redirect(`/admin/${req.params.id}/profil`)
+                res.redirect(`/admin/profil`)
             } else {
-                const data = await db('petugas').where({id: req.params.id})
+                const data = await db('petugas').where({id: req.session.aidi})
                 res.render('admin/edit-profile', {
                     title: 'Edit Profil',
                     data,
-                    id: req.params.id,
                     errors
                 })
+            }
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async passwordGet (req,res) {
+        try {
+            res.render('admin/password', {
+                title: 'Ubah Password',
+                pass: false
+            })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async passwordPost (req,res) {
+        try {
+            const {password} = req.body
+
+            const oldPassword = await db('petugas').where({id: req.session.aidi}).select('password')
+
+            if (password == oldPassword[0].password) {
+                res.render('admin/password', {
+                    title: 'Ubah Password',
+                    pass: true
+                })
+            } else {
+                res.render('admin/password', {
+                    title: 'Ubah Password',
+                    pass: false,
+                    errors: 'Password Salah'
+                })
+            }
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async passwordPostNew (req,res) {
+        try {
+            const {password} = req.body
+
+            const spaceCheck = /\s/.test(password)
+
+            if (spaceCheck) {
+                res.render('admin/password', {
+                    title: 'Ubah Password',
+                    pass: true,
+                    errors: 'Password Tidak Bisa Mengandung Spasi'
+                })
+            } else {
+                await db('petugas').where({id: req.session.aidi}).update({
+                    password: password,
+                    updated_at: new Date()
+                })
+                res.redirect('/admin/profil')
             }
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -98,8 +152,7 @@ class AdminController {
                 title: 'dasbor',
                 semua,
                 belum,
-                sudah,
-                id: req.params.id
+                sudah
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -108,12 +161,11 @@ class AdminController {
 
     static async masyarakatList (req,res) {
         try {
-            const data = await db('masyarakat').select('*').orderBy('id', 'asc')
+            const data = await db('masyarakat').orderBy('id', 'asc')
 
             res.render('admin/masyarakat', {
                 title: 'Daftar Masyarakat',
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -125,9 +177,8 @@ class AdminController {
             const data = await db('masyarakat').where({id: req.params.idMasyarakat})
 
             res.render('admin/masyarakat-detail', {
-                title: `${data[0].nama}`,
-                data,
-                id: req.params.id
+                title: data[0].nama,
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -140,8 +191,7 @@ class AdminController {
 
             res.render('admin/masyarakat-edit', {
                 title: data[0].nama,
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -178,18 +228,17 @@ class AdminController {
                 res.render('admin/masyarakat-edit', {
                     title: data[0].nama,
                     data,
-                    id: req.params.id,
                     errors
                 })
             } else {
                 await db('masyarakat').where({id: req.params.idMasyarakat}).update({
-                    nik,
+                    nik: nik.replace(/\s+/g,''),
                     nama,
-                    no_telp,
+                    no_telp: no_telp.replace(/\s+/g,''),
                     alamat,
                     updated_at: new Date()
                 })                
-                res.redirect(`/admin/${req.params.id}/masyarakat`)
+                res.redirect(`/admin/masyarakat`)
             }
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -199,7 +248,7 @@ class AdminController {
     static async masyarakatDelete (req,res) {
         try {
             await db('masyarakat').where({id: req.params.idMasyarakat}).del()
-            res.redirect(`/admin/${req.params.id}/masyarakat`)
+            res.redirect(`/admin/masyarakat`)
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }
@@ -207,12 +256,11 @@ class AdminController {
 
     static async petugasList (req,res) {
         try {
-            const data = await db('petugas').whereNot({id: req.params.id}).orderBy('id', 'asc')
+            const data = await db('petugas').whereNot({id: req.session.aidi}).orderBy('id', 'asc')
 
             res.render ('admin/petugas', {
                 title: 'Daftar Petugas',
-                data,
-                id : req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -222,8 +270,7 @@ class AdminController {
     static async petugasRegisGet (req,res) {
         try {
             res.render('admin/petugas-register', {
-                title: 'Tambah Petugas',
-                id: req.params.id
+                title: 'Tambah Petugas'
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -260,11 +307,10 @@ class AdminController {
                     created_at: new Date(),
                     updated_at: new Date()
                 })
-                res.redirect(`/admin/${req.params.id}/petugas`)
+                res.redirect(`/admin/petugas`)
             } else {
                 res.render('admin/petugas-register', {
                     title: 'Tambah Petugas',
-                    id: req.params.id,
                     errors
                 })
             }
@@ -279,8 +325,7 @@ class AdminController {
 
             res.render('admin/petugas-detail', {
                 title: data[0].nama,
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})   
@@ -293,8 +338,7 @@ class AdminController {
 
             res.render('admin/laporan', {
                 title: 'Belum Dibalas',
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -309,8 +353,7 @@ class AdminController {
             res.render('admin/laporan-detail', {
                 title: 'Info Laporan',
                 dataLap,
-                dataUser,
-                id: req.params.id
+                dataUser
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -325,12 +368,12 @@ class AdminController {
                 isi_balasan,
                 tgl_balasan: new Date(),
                 id_laporan: req.params.idLap,
-                id_petugas: req.params.id
+                id_petugas: req.session.aidi
             }).then(() => {
                 return db('laporan').where({id_laporan: req.params.idLap}).update({status: true})
             })
 
-            res.redirect(`/admin/${req.params.id}/laporan`)
+            res.redirect(`/admin/laporan`)
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }
@@ -342,8 +385,7 @@ class AdminController {
 
             res.render('admin/selesai', {
                 title: 'Laporan yang Sudah Dibalas',
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -362,8 +404,7 @@ class AdminController {
                 dataLap: dataLap[0],
                 dataUser: dataUser[0],
                 dataAdmin: dataAdmin[0],
-                dataBalas: dataBalas[0],
-                id: req.params.id
+                dataBalas: dataBalas[0]
             })
 
         } catch (error) {
@@ -373,12 +414,11 @@ class AdminController {
 
     static async riwayat (req,res) {
         try {
-            const data = await db('balasan').join('laporan', 'laporan.id_laporan', '=', 'balasan.id_laporan').join('masyarakat', 'masyarakat.id', '=', 'laporan.id_masyarakat').where({id_petugas: req.params.id})
+            const data = await db('balasan').join('laporan', 'laporan.id_laporan', '=', 'balasan.id_laporan').join('masyarakat', 'masyarakat.id', '=', 'laporan.id_masyarakat').where({id_petugas: req.session.aidi})
 
             res.render('admin/riwayat', {
                 title: 'Riwayat Anda',
-                data,
-                id: req.params.id
+                data
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})   
@@ -388,13 +428,21 @@ class AdminController {
     static async riwayatDetail (req,res) {
         try {
             const data = await db('balasan').join('laporan', 'laporan.id_laporan', '=', 'balasan.id_laporan').join('masyarakat', 'masyarakat.id', '=', 'laporan.id_masyarakat').where({id_balasan: req.params.idBalasan})
-            const dataAdmin = await db('petugas').where({id: req.params.id}).select('nama', 'alamat', 'no_telp')
+            const dataAdmin = await db('petugas').where({id: req.session.aidi}).select('nama', 'alamat', 'no_telp')
             res.render('admin/riwayat-detail', {
                 title: 'Info Laporan dari Riwayat',
                 data: data[0],
-                dataAdmin: dataAdmin[0],
-                id: req.params.id
+                dataAdmin: dataAdmin[0]
             })
+        } catch (error) {
+            res.status(500).json({'Error': error.message})
+        }
+    }
+
+    static async logout (req,res) {
+        try {
+            req.session.destroy()
+            res.redirect('/')
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }
