@@ -1,5 +1,6 @@
 const db = require('../db/db')
 const bcrypt = require('bcrypt')
+const flash = require('connect-flash')
 
 class Controller {
     static isLoggedInUser (req,res,next) {
@@ -42,7 +43,7 @@ class Controller {
         try {
             res.render('login', {
                 title: 'Laporan Masyarakat Depok',
-                message: req.query.msg
+                message: req.flash('success')
             })
         } catch (error) {
             res.status(500).json({'Error' : error.message})
@@ -169,7 +170,8 @@ class Controller {
                     created_at: new Date(),
                     updated_at: new Date()
                 })
-                res.redirect('/?msg=Registrasi Berhasil! Silahkan Login')
+                req.flash('success', 'Registrasi Berhasil, Silahkan Login!')
+                res.redirect('/')
             } else {
                 res.render('register', {
                     title: 'Halaman Register',

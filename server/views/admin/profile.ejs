@@ -9,6 +9,11 @@
 <body>
     <h1>Profil Anda</h1>
 
+    <% if (message.length > 0) { %>
+        <h3 style="color: green;"><%= message %></h3>
+        <a href="/admin/profil">oke</a>
+    <% } %>
+
     <h2>username : <%= profile.username %></h2>
     <h2>nama : <%= profile.nama %></h2>
     <h2>no. telp : <%= 0+profile.no_telp %></h2>

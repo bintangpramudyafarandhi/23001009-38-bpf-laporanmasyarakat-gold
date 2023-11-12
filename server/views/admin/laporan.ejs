@@ -9,6 +9,11 @@
     <center>
         <h1>Laporan yang Belum Dibalas</h1> <br> <br>
 
+        <% if (message.length > 0) { %>
+            <h3 style="color: green;"><%= message %></h3>
+            <a href="/admin/laporan">oke</a> <br> <br>
+        <% } %>
+
         <% if (data.length == 0) { %>
             <h1>Tidak Ada Laporan yang Belum Dibalas!</h1>
         <% } else { %>

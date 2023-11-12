@@ -10,6 +10,11 @@
     <center>
         <h1>Daftar Petugas</h1>
 
+        <% if (message.length > 0) { %>
+            <h3 style="color: green;"><%= message %></h3>
+            <a href="/admin/petugas">oke</a> <br> <br>
+        <% } %>
+
         <a href="petugas/tambah">Tambah Petugas</a> <br> <br>
 
         <% if (data.length == 0) { %>

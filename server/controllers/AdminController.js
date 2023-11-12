@@ -20,7 +20,8 @@ class AdminController {
 
             res.render('admin/profile', {
                 title: 'Profil Anda',
-                profile: data[0]
+                profile: data[0],
+                message: req.flash('success')
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -32,7 +33,7 @@ class AdminController {
             const data = await db('petugas').where({id: req.session.aidi})
             res.render('admin/edit-profile', {
                 title: 'Edit Profil',
-                data
+                data,
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -69,7 +70,7 @@ class AdminController {
                     alamat,
                     updated_at: new Date()
                 })
-
+                req.flash('success', 'Profil Berhasil Diubah!')
                 res.redirect(`/admin/profil`)
             } else {
                 const data = await db('petugas').where({id: req.session.aidi})
@@ -135,6 +136,7 @@ class AdminController {
                     password: password,
                     updated_at: new Date()
                 })
+                req.flash('success', 'Password Berhasil Diubah!')
                 res.redirect('/admin/profil')
             }
         } catch (error) {
@@ -165,7 +167,8 @@ class AdminController {
 
             res.render('admin/masyarakat', {
                 title: 'Daftar Masyarakat',
-                data
+                data,
+                message: req.flash('success')
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -237,7 +240,8 @@ class AdminController {
                     no_telp: no_telp.replace(/\s+/g,''),
                     alamat,
                     updated_at: new Date()
-                })                
+                })
+                req.flash('success', 'Data Berhasil Diubah!')           
                 res.redirect(`/admin/masyarakat`)
             }
         } catch (error) {
@@ -248,6 +252,7 @@ class AdminController {
     static async masyarakatDelete (req,res) {
         try {
             await db('masyarakat').where({id: req.params.idMasyarakat}).del()
+            req.flash('success', 'Data Berhasil Dihapus!')
             res.redirect(`/admin/masyarakat`)
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -260,7 +265,8 @@ class AdminController {
 
             res.render ('admin/petugas', {
                 title: 'Daftar Petugas',
-                data
+                data,
+                message: req.flash('success')
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -270,7 +276,7 @@ class AdminController {
     static async petugasRegisGet (req,res) {
         try {
             res.render('admin/petugas-register', {
-                title: 'Tambah Petugas'
+                title: 'Tambah Petugas',
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -307,6 +313,7 @@ class AdminController {
                     created_at: new Date(),
                     updated_at: new Date()
                 })
+                req.flash('success', 'Data Berhasil Masuk!')
                 res.redirect(`/admin/petugas`)
             } else {
                 res.render('admin/petugas-register', {
@@ -338,7 +345,8 @@ class AdminController {
 
             res.render('admin/laporan', {
                 title: 'Belum Dibalas',
-                data
+                data,
+                message: req.flash('success')
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -372,7 +380,7 @@ class AdminController {
             }).then(() => {
                 return db('laporan').where({id_laporan: req.params.idLap}).update({status: true})
             })
-
+            req.flash('success', 'Berhasil Membalas Laporan!')
             res.redirect(`/admin/laporan`)
         } catch (error) {
             res.status(500).json({'Error': error.message})

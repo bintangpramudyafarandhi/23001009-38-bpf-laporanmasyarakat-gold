@@ -1,5 +1,6 @@
 const db = require('../db/db')
 const bcrypt = require('bcrypt')
+const flash = require('connect-flash')
 
 class UserController {
     static async homePage (req, res) {
@@ -20,7 +21,8 @@ class UserController {
 
             res.render('user/profile' , {
                 title: 'Profil Anda',
-                data: data[0]
+                data: data[0],
+                message: req.flash('success')
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -72,6 +74,7 @@ class UserController {
                     alamat,
                     updated_at: new Date()
                 })
+                req.flash('success', 'Profil Berhasil Diubah!')
                 res.redirect(`/user/profil`)
             } else {
                 const data = await db('masyarakat').where({id: req.session.aidi})
@@ -138,6 +141,7 @@ class UserController {
                     password: await bcrypt.hash(password, 10),
                     updated_at: new Date()
                 })
+                req.flash('success', 'Password Berhasil Diubah!')
                 res.redirect('/user/profil')
             }
         } catch (error) {

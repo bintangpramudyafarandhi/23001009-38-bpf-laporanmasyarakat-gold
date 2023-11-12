@@ -4,6 +4,7 @@ const routes = require('./routes/')
 const ejs = require('ejs')
 const port = 3000
 const session = require('express-session')
+const flash = require('connect-flash')
 
 app.set('view engine', 'ejs')
 
@@ -17,6 +18,7 @@ app.use(session({
         maxAge: 60 * 60 * 60000
     }
 }))
+app.use(flash())
 
 app.use(routes)
 

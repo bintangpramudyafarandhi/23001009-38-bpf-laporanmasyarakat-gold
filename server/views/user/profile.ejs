@@ -8,6 +8,11 @@
 <body>
     <h1>Profil Anda</h1>
 
+    <% if (message.length > 0) { %>
+        <h3 style="color: green;"><%= message %></h3>
+        <a href="/user/profil">oke</a>
+    <% } %>
+
     <h3>NIK: <%= data.nik %></h3>
     <h3>Nama Lengkap: <%= data.nama %></h3>
     <h3>Nomor Telepon: <%= 0+data.no_telp %></h3>
