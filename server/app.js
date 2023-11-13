@@ -28,7 +28,9 @@ app.use(routes)
 
 app.use('/',(req,res) => {
     res.status(404)
-    res.send('Error 404 : Page not found.')
+    res.render('404', {
+        layout: '404'
+    })
 })
   
 app.listen(port, () => {
