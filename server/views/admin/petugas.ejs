@@ -1,0 +1,74 @@
+<style>
+    .title {
+        font-size: 35px;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+
+    th {
+        background-color: #2E3691 !important;
+        text-align: center !important;
+        color: white !important;
+    }
+
+    .top-left {
+        border-top-left-radius: 20px;
+    }
+    .top-right {
+        border-top-right-radius: 20px;
+    }
+    .bottom-left {
+        border-bottom-left-radius: 20px;
+    }
+    .bottom-right {
+        border-bottom-right-radius: 20px;
+    }
+</style>
+<body>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="title">Daftar Petugas</h1>
+        <a class="btn btn-success" href="petugas/tambah"><i class="fa-solid fa-user-plus"></i> Tambah Petugas</a>
+    </div>
+
+    <% if (message.length > 0) { %>
+        <p class="alert alert-success w-100 text-center" style="color: green;"><%= message %></p class="alert alert-success w-100 text-center">
+    <% } %>
+
+    <% if (data.length == 0) { %>
+        <h1 class="text-center">Tidak Ada Petugas Lain!</h1>
+    <% } else { %>
+        <table class="table text-center" id="example">
+            <thead>
+                <tr>
+                    <th class="top-left">#</th>
+                    <th>Username</th>
+                    <th>Nama</th>
+                    <th>No. Telp</th>
+                    <th>Alamat</th>
+                    <th class="top-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% i = 0 %>
+                <% data.forEach(el => { %>
+                    <tr>
+                        <td><%= i+=1 %></td>
+                        <td><%= el.username %></td>
+                        <td><%= el.nama %></td>
+                        <td><%= 0+el.no_telp %></td>
+                        <td><%= el.alamat %></td>
+                        <td><a class="btn btn-primary" href="petugas/<%= el.id %>"><i class="fa-solid fa-circle-info"></i></a></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+            <tfoot>
+                <th class="bottom-left">#</th>
+                <th>Username</th>
+                <th>Nama</th>
+                <th>No. Telp</th>
+                <th>Alamat</th>
+                <th class="bottom-right">Aksi</th>
+            </tfoot>
+        </table>
+    <% } %>
+</body>

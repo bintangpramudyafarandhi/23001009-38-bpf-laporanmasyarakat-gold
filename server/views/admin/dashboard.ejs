@@ -1,0 +1,61 @@
+<style>
+    .card {
+        border-radius: 20px !important;
+    }
+
+    .header1 {
+        border-top-left-radius: 20px !important;
+        border-top-right-radius: 20px !important;
+        color: white;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .body1 {
+        border-bottom-left-radius: 20px !important;
+        border-bottom-right-radius: 20px !important;
+        color: white;
+        font-size: 50px;
+        font-weight: 700;
+    }
+
+    .header2 {
+        border-top-left-radius: 20px !important;
+        border-top-right-radius: 20px !important;
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .body2 {
+        border-bottom-left-radius: 20px !important;
+        border-bottom-right-radius: 20px !important;
+        color: white;
+        font-size: 50px;
+        font-weight: 700;
+    }
+</style>
+<body>
+    <div class="container con1 w-100">
+        <div class="card card1 bg-warning text-center mt-2">
+            <div class="card-header header1">Total Laporan Masuk</div>
+            <div class="card-body body1">
+                <p><%= semua.length %></p>
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-between">
+        <div class="card card2 bg-danger text-center mt-2" style="width: 49%;">
+            <div class="card-header header2">Laporan Belum Dibalas</div>
+            <div class="card-body body2">
+                <p><%= belum.length %></p>
+            </div>
+        </div>
+        <div class="card card2 bg-success text-center mt-2" style="width: 49%;">
+            <div class="card-header header2">Laporan Sudah Dibalas</div>
+            <div class="card-body body2">
+                <p><%= sudah.length %></p>
+            </div>
+        </div>
+    </div>
+</body>

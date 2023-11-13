@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="/icon/favicon.ico">
+    <title><%= title %></title>
+
+    <style>
+        body {
+            font-family: 'Poppins' !important;
+        }
+
+        .title {
+            background-color: #2E3691;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .div-form {
+            background-color: #2E3691;
+            border-radius: 20px;
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            margin-bottom: -15px;
+        }
+
+        .btn {
+            border-radius: 10px;
+        }
+
+        .login {
+            font-weight: 600;
+        }
+
+        .msg-btn-err {
+            text-decoration: none;
+            color: red;
+            position: absolute;
+            font-size: 10px;
+            margin-top: -73px;
+            margin-left: 145px;
+        }
+
+        .justify-content-between {
+            margin-top: -25px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1 class="title mt-3" >Aplikasi Laporan Masyarakat Depok</h1> <br>
+        <h1 class="login">Login Petugas</h1>
+
+        <% if (typeof errors !== 'undefined') { %>
+            <p class="alert alert-danger w-25" style="color: red;"><i class="fa-solid fa-circle-exclamation"></i> <%= errors[0].message %></p>
+            <a class="msg-btn-err" href="/login-petugas"><i class="fa-sharp fa-solid fa-xmark"></i></a>
+        <% } %>
+
+        <div class="container w-25 div-form">
+            <form class="mt-2" action="/login-petugas" method="post">
+                <input class="form-control" type="text" id="username" name="username" placeholder="Username" required> <br>
+                <input class="form-control" type="password" id="password" name="password" placeholder="Password"> <br> <br>
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-danger" style="width: 23%;" href="/"><i class="fa-solid fa-right-from-bracket"></i></a>
+                    <button class="btn btn-success w-75" type="submit">Masuk</button>
+                </div>
+            </form>
+        </div>
+
+    </center>
+</body>
+</html>

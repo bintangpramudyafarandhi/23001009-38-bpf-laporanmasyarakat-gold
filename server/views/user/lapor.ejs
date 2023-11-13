@@ -1,0 +1,39 @@
+<style>
+    .title {
+        text-align: center;
+        font-size: 50px;
+        font-weight: 700;
+    }
+
+    .btn {
+        border-radius: 10px;
+    }
+
+    textarea {
+        border-radius: 20px !important;
+    }
+</style>
+
+<body>
+    <h1 class="title">Tulis Laporan</h1>
+
+    <% if (typeof message !== 'undefined') { %>
+        <div class="container text-center">
+            <p class="alert alert-success" style="color: green;"><%= message %></p>
+        </div>
+    <% } %>
+
+    <div class="container w-100">
+        <form action="/user/lapor" method="post" enctype="multipart/form-data">
+            <!-- <input type="text" name="isi_laporan" id="isi_laporan" placeholder="Tulis Laporan Disini" required> -->
+            <textarea style="height: 200px;" class="form-control mb-2" name="isi_laporan" id="isi_laporan" placeholder="Tulis Laporan Disini"></textarea>
+            <div class="d-flex justify-content-between">
+                <input class="file" type="file" id="foto" name="foto" multiple>
+                <div class="d-flex justify-content-between w-25">
+                    <a class="btn btn-danger" style="width: 23%;" href="/user"><i class="fa-solid fa-right-from-bracket"></i></a>
+                    <button class="btn btn-success w-75" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
