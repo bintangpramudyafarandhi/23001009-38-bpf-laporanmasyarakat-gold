@@ -2,14 +2,18 @@ const express = require('express')
 const app = express()
 const routes = require('./routes/')
 const ejs = require('ejs')
+const path = require('path')
 const port = 3000
 const session = require('express-session')
 const flash = require('connect-flash')
+const expressEjsLayouts = require('express-ejs-layouts')
 
 app.set('view engine', 'ejs')
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+app.use(expressEjsLayouts)
+app.use(express.static(path.join(__dirname,'public')))
 app.use(session({
     secret: 'oreo',
     resave: false,

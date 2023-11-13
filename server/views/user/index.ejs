@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-</head>
+<style>
+    h1 {
+        text-align: center;
+        margin-top: 250px;
+        font-size: 50px;
+        font-weight: 700;
+    }
+</style>
+
 <body>
     <h1>Selamat Datang, <%= data[0].nama %>!</h1>
-    <a href="/user/profil">profil</a>
-    <a href="/user/lapor">lapor</a>
-    <a href="/user/riwayat">riwayat</a>
-    <br> <a href="/user/logout" onclick="return confirm('Apakah Anda Ingin Logout?')">logout</a>
 </body>
-</html>

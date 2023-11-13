@@ -1,54 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-</head>
+<style>
+    .title {
+        font-size: 50px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    th {
+        background-color: #2E3691 !important;
+        text-align: center !important;
+        color: white !important;
+    }
+
+    .top-left {
+        border-top-left-radius: 20px;
+    }
+    .top-right {
+        border-top-right-radius: 20px;
+    }
+    .bottom-left {
+        border-bottom-left-radius: 20px;
+    }
+    .bottom-right {
+        border-bottom-right-radius: 20px;
+    }
+
+    table {
+        text-align: center;
+    }
+</style>
 <body>
-    <center>
-        <h1>Daftar Masyarakat</h1>
+    <h1 class="title">Daftar Masyarakat</h1>
 
-        <% if (message.length > 0) { %>
-            <h3 style="color: green;"><%= message %></h3>
-            <a href="/admin/masyarakat">oke</a> <br> <br>
-        <% } %>
+    <% if (message.length > 0) { %>
+        <p class="alert alert-success w-100 text-center" style="color: green;"><%= message %></p>
+    <% } %>    
 
-        <% if (data.length == 0) { %>
-            <h1>Tidak ada Masyarakat!</h1>
-        <% } else { %>
-            <table border="2">
-                <thead>
+    <% if (data.length == 0) { %>
+        <h1>Tidak ada Masyarakat!</h1>
+    <% } else { %>
+        <table class="table" id="example">
+            <thead>
+                <tr>
+                    <th class="top-left">#</th>
+                    <th>NIK</th>
+                    <th>Nama</th>
+                    <th>No. Telp</th>
+                    <th>Alamat</th>
+                    <th class="top-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% i = 0 %>
+                <% data.forEach(el => { %>
                     <tr>
-                        <th>#</th>
-                        <th>NIK</th>
-                        <th>Nama</th>
-                        <th>No. Telp</th>
-                        <th>Alamat</th>
-                        <th>Aksi</th>
+                        <td><%= i += 1 %></td>
+                        <td><%= el.nik %></td>
+                        <td><%= el.nama %></td>
+                        <td><%= 0+el.no_telp %></td>
+                        <td><%= el.alamat %></td>
+                        <td>
+                            <a class="btn btn-primary" href="/admin/masyarakat/<%= el.id %>"><i class="fa-solid fa-circle-info"></i></a>
+                            <a class="btn btn-success" href="/admin/masyarakat/<%= el.id %>/edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a class="btn btn-danger" href="/admin/masyarakat/<%= el.id %>/delete" onclick="return confirm('Apakah Anda Ingin Menghapus <%=el.nama%>?')"><i class="fa-solid fa-trash"></i></a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% i = 0 %>
-                    <% data.forEach(el => { %>
-                        <tr>
-                            <td><%= i += 1 %></td>
-                            <td><%= el.nik %></td>
-                            <td><%= el.nama %></td>
-                            <td><%= 0+el.no_telp %></td>
-                            <td><%= el.alamat %></td>
-                            <td>
-                                <a href="/admin/masyarakat/<%= el.id %>">Info</a>
-                                <a href="/admin/masyarakat/<%= el.id %>/edit">Edit</a>
-                                <a href="/admin/masyarakat/<%= el.id %>/delete" onclick="return confirm('Apakah Anda Ingin Menghapus <%=el.nama%>?')">Hapus</a>
-                            </td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
-        <% } %>
-        <br> <br> <a href="/admin">kembali</a>
-    </center>
+                <% }); %>
+            </tbody>
+            <tfoot>
+                <th class="bottom-left">#</th>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>No. Telp</th>
+                <th>Alamat</th>
+                <th class="bottom-right">Aksi</th>
+            </tfoot>
+        </table>
+    <% } %>
 </body>
-</html>

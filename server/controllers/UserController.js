@@ -7,8 +7,10 @@ class UserController {
         try {
             const data = await db('masyarakat').where({id: req.session.aidi}).select('nama')
             res.render('user/index', {
+                layout: 'layout/user-sidebar',
                 title: 'Laporan Masyarakat Depok',
-                data
+                data,
+                nama: data[0].nama
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -20,8 +22,10 @@ class UserController {
             const data = await db('masyarakat').where({id: req.session.aidi})
 
             res.render('user/profile' , {
+                layout: 'layout/user-sidebar',
                 title: 'Profil Anda',
                 data: data[0],
+                nama: data[0].nama,
                 message: req.flash('success')
             })
         } catch (error) {
@@ -34,8 +38,10 @@ class UserController {
             const data = await db('masyarakat').where({id: req.session.aidi})
 
             res.render('user/profile-edit', {
+                layout: 'layout/user-sidebar',
                 title: 'Edit Profil',
-                data: data[0]
+                data: data[0],
+                nama: data[0].nama
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})   
@@ -79,9 +85,11 @@ class UserController {
             } else {
                 const data = await db('masyarakat').where({id: req.session.aidi})
                 res.render('user/profile-edit', {
+                    layout: 'layout/user-sidebar',
                     title: 'Edit Profil',
                     data: data[0],
-                    errors
+                    errors,
+                    nama: data[0].nama
                 })
             }
         } catch (error) {
@@ -91,9 +99,12 @@ class UserController {
 
     static async passwordGet (req,res) {
         try {
+            const data = await db('masyarakat').where({id: req.session.aidi}).select('nama')
             res.render('user/password', {
+                layout: 'layout/user-sidebar',
                 title: 'Ubah Password',
-                pass: false
+                pass: false,
+                nama: data[0].nama
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -104,19 +115,24 @@ class UserController {
         try {
             const {password} = req.body
 
+            const data = await db('masyarakat').where({id: req.session.aidi}).select('nama')
             const oldPassword = await db('masyarakat').where({id: req.session.aidi}).select('password')
             const passCheck = await bcrypt.compare(password, oldPassword[0].password)
 
             if (passCheck) {
                 res.render('user/password', {
+                    layout: 'layout/user-sidebar',
                     title: 'Ubah Password',
-                    pass: true
+                    pass: true,
+                    nama: data[0].nama
                 })
             } else {
                 res.render('user/password', {
+                    layout: 'layout/user-sidebar',
                     title: 'Ubah Password',
                     pass: false,
-                    errors: 'Password Salah'
+                    errors: 'Password Salah',
+                    nama: data[0].nama
                 })
             }
         } catch (error) {
@@ -129,12 +145,26 @@ class UserController {
             const {password} = req.body
 
             const spaceCheck = /\s/.test(password)
+            const data = await db('masyarakat').where({id: req.session.aidi})
+            const oldPassword = await db('masyarakat').where({id: req.session.aidi}).select('password')
+
+            const oldPassCheck = await bcrypt.compare(password, oldPassword[0].password)
 
             if (spaceCheck) {
                 res.render('user/password', {
+                    layout: 'layout/user-sidebar',
                     title: 'Ubah Password',
                     pass: true,
-                    errors: 'Password Tidak Bisa Mengandung Spasi'
+                    errors: 'Password Tidak Bisa Mengandung Spasi',
+                    nama: data[0].nama
+                })
+            } else if (oldPassCheck) {
+                res.render('user/password', {
+                    layout: 'layout/user-sidebar',
+                    title: 'Ubah Password',
+                    pass: true,
+                    errors: 'Password Tidak Bisa Sama Seperti Password Lama',
+                    nama: data[0].nama
                 })
             } else {
                 await db('masyarakat').where({id: req.session.aidi}).update({
@@ -151,8 +181,11 @@ class UserController {
 
     static async laporGet (req,res) {
         try {
+            const data = await db('masyarakat').where({id: req.session.aidi}).select('nama')
             res.render('user/lapor', {
-                title: 'Tulis Laporan'
+                layout: 'layout/user-sidebar',
+                title: 'Tulis Laporan',
+                nama: data[0].nama
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -162,18 +195,38 @@ class UserController {
     static async laporPost (req,res) {
         try {
             const {isi_laporan} = req.body
+            const foto = req.file
 
-            await db('laporan').insert({
-                tgl_laporan: new Date(),
-                isi_laporan,
-                status: false,
-                id_masyarakat: req.session.aidi
-            })
+            const data = await db('masyarakat').where({id: req.session.aidi}).select('nama')
+
+            if (!foto || !foto.path) {
+                await db('laporan').insert({
+                    tgl_laporan: new Date(),
+                    isi_laporan,
+                    status: false,
+                    id_masyarakat: req.session.aidi
+                })
+            } else {
+                await db('laporan').insert({
+                    tgl_laporan: new Date(),
+                    isi_laporan,
+                    status: false,
+                    foto: foto.path,
+                    id_masyarakat: req.session.aidi
+                })
+            }
 
             res.render('user/lapor', {
+                layout: 'layout/user-sidebar',
                 title: 'Tulis Laporan',
-                message: 'Laporan Terkirim, Silahkan Tunggu Balasan dari Petugas'
+                message: 'Laporan Terkirim, Silahkan Tunggu Balasan dari Petugas!',
+                nama: data[0].nama
             })
+
+            // res.status(201).json({
+            //     data: req.body,
+            //     foto: req.file
+            // })
         } catch (error) {
             res.status(500).json({'Error': error.message})
         }
@@ -182,10 +235,13 @@ class UserController {
     static async riwayat (req,res) {
         try {
             const data = await db('laporan').where({id_masyarakat: req.session.aidi})
+            const dataUser = await db('masyarakat').where({id: req.session.aidi}).select('nama')
 
             res.render('user/riwayat', {
+                layout: 'layout/user-sidebar',
                 title: 'Riwayat Laporan',
-                data
+                data,
+                nama: dataUser[0].nama
             })
         } catch (error) {
             res.status(500).json({'Error': error.message})
@@ -201,17 +257,21 @@ class UserController {
             if (dataBalasan.length > 0) {
                 const dataAdmin = await db('petugas').where({id: dataBalasan[0].id_petugas})
                 res.render('user/riwayat-detail', {
+                    layout: 'layout/user-sidebar',
                     title: 'Info Laporan',
                     dataLaporan: dataLaporan[0],
                     dataBalasan: dataBalasan[0],
                     dataUser: dataUser[0],
-                    dataAdmin: dataAdmin[0]
+                    dataAdmin: dataAdmin[0],
+                    nama: dataUser[0].nama
                 })
             } else {
                 res.render('user/riwayat-detail', {
+                    layout: 'layout/user-sidebar',
                     title: 'Info Laporan',
                     dataLaporan: dataLaporan[0],
-                    dataUser: dataUser[0]
+                    dataUser: dataUser[0],
+                    nama: dataUser[0].nama
                 })
             }
         } catch (error) {

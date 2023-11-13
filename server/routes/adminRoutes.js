@@ -27,6 +27,7 @@ route.get('/petugas/:idPetugas', AdminController.petugasDetail)
 route.get('/laporan', AdminController.belumBalas)
 route.get('/laporan/:idLap', AdminController.belumBalasDetail)
 route.post('/laporan/:idLap', AdminController.balas)
+route.get('/laporan/:idLap/delete', AdminController.hapusLaporan)
 
 route.get('/selesai', AdminController.sudahBalas)
 route.get('/selesai/:idLap', AdminController.sudahBalasDetail)

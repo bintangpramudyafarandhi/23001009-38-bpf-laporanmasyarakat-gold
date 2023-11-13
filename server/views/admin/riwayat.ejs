@@ -1,45 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-</head>
+<style>
+    .title {
+        font-size: 50px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    th {
+        background-color: #2E3691 !important;
+        text-align: center !important;
+        color: white !important;
+    }
+
+    .top-left {
+        border-top-left-radius: 20px;
+    }
+    .top-right {
+        border-top-right-radius: 20px;
+    }
+    .bottom-left {
+        border-bottom-left-radius: 20px;
+    }
+    .bottom-right {
+        border-bottom-right-radius: 20px;
+    }
+
+    table {
+        text-align: center;
+    }
+</style>
 <body>
-    <center>
-        <h1>Laporan yang Anda Balas</h1>
+    <h1 class="title text-center">Laporan yang Anda Balas</h1>
 
-        <% if (data.length == 0) { %>
-            <h1>Belum Ada Laporan yang Anda Balas</h1>
-        <% } else { %>
-            <table border="2">
-                <thead>
+    <% if (data.length == 0) { %>
+        <h1>Belum Ada Laporan yang Anda Balas</h1>
+    <% } else { %>
+        <table class="table" id="example">
+            <thead>
+                <tr>
+                    <th class="top-left">#</th>
+                    <th>NIK</th>
+                    <th>Nama</th>
+                    <th>Tanggal Masuk</th>
+                    <th>Tanggal Dibalas</th>
+                    <th class="top-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% i = 0 %>
+                <% data.forEach(el => { %>
                     <tr>
-                        <th>#</th>
-                        <th>NIK</th>
-                        <th>Nama</th>
-                        <th>Tanggal Masuk</th>
-                        <th>Tanggal Dibalas</th>
-                        <th>Aksi</th>
+                        <td><%= i+=1 %></td>
+                        <td><%= el.nik %></td>
+                        <td><%= el.nama %></td>
+                        <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
+                        <td><%= el.tgl_balasan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
+                        <td><a class="btn btn-primary" href="riwayat/<%= el.id_balasan %>"><i class="fa-solid fa-circle-info"></i></a></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% i = 0 %>
-                    <% data.forEach(el => { %>
-                        <tr>
-                            <td><%= i+=1 %></td>
-                            <td><%= el.nik %></td>
-                            <td><%= el.nama %></td>
-                            <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
-                            <td><%= el.tgl_balasan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
-                            <td><a href="riwayat/<%= el.id_balasan %>">Info</a></td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        <% } %>
-
-        <br> <br> <a href="/admin">kembali</a>
-    </center>
+                <% }) %>
+            </tbody>
+            <tfoot>
+                <th class="bottom-left">#</th>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Tanggal Masuk</th>
+                <th>Tanggal Dibalas</th>
+                <th class="bottom-right">Aksi</th>
+            </tfoot>
+        </table>
+    <% } %>
 </body>
 </html>

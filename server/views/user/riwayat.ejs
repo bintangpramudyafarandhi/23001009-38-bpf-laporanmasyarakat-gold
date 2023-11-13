@@ -1,48 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-</head>
+<style>
+    .title {
+        text-align: center;
+        font-size: 50px;
+        font-weight: 700;
+    }
+
+    th {
+        background-color: #2E3691 !important;
+        color: white !important;
+        font-size: 15px;
+        text-align: center !important;
+    }
+
+    table {
+        align-self: center;
+        text-align: center;
+    }
+
+    .top-left {
+        border-top-left-radius: 10px;
+    }
+    .top-right {
+        border-top-right-radius: 10px;
+    }
+    .bottom-left {
+        border-bottom-left-radius: 10px;
+    }
+    .bottom-right {
+        border-bottom-right-radius: 10px;
+    }
+</style>
+
 <body>
-    <center>
-        <h1>Riwayat Laporan</h1>
+        <h1 class="title">Riwayat Laporan</h1>
 
         <% if (data.length == 0) { %>
-         <h2>Anda Belum Membuat Laporan!</h2>
+         <h2 class="nodata">Anda Belum Membuat Laporan!</h2>
         <% } else { %>
-            <table border="2">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tanggal Dibuat</th>
-                        <th>Isi Laporan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% i = 0 %>
-                    <% data.forEach(el => { %>
+            <div class="container w-100 mt-3">
+                <table class="table w-100" id="example">
+                    <thead>
                         <tr>
-                            <td><%= i+=1 %></td>
-                            <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
-                            <td><%= el.isi_laporan %></td>
-                            <td>
-                                <% if (el.status === false) { %>
-                                    Belum Dibalas
-                                <% } else { %>
-                                    Sudah Dibalas
-                                <% } %>
-                            </td>
-                            <td><a href="riwayat/<%= el.id_laporan %>">Info</a></td>
+                            <th class="top-left" scope="col">#</th>
+                            <th scope="col">Tanggal Dibuat</th>
+                            <th scope="col">Status</th>
+                            <th class="top-right" scope="col">Aksi</th>
                         </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% i = 0 %>
+                        <% data.forEach(el => { %>
+                            <tr>
+                                <td scope="row"><%= i+=1 %></td>
+                                <td><%= el.tgl_laporan.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) %></td>
+                                <td>
+                                    <% if (el.status === false) { %>
+                                        Belum Dibalas
+                                    <% } else { %>
+                                        Sudah Dibalas
+                                    <% } %>
+                                </td>
+                                <td><a class="btn btn-primary" href="/user/riwayat/<%= el.id_laporan %>"><i class="fa-solid fa-circle-info"></i></a></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                    <tfoot>
+                        <th class="bottom-left">#</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Status</th>
+                        <th class="bottom-right">Aksi</th>
+                    </tfoot>
+                </table>
+            </div>
         <% } %>
-        <br> <br> <a href="/user">kembali</a>
-    </center>
 </body>
-</html>

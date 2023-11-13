@@ -4,11 +4,12 @@
  */
 exports.up = function(knex) {
     return knex.schema.createTable('laporan', table => {
-        table.increments('id').primary()
+        table.increments('id_laporan').primary()
         table.timestamp('tgl_laporan')
         table.string('isi_laporan', 10000)
         table.boolean('status')
-        table.integer('id_masyarakat').references('id').inTable('masyarakat')
+        table.string('foto')
+        table.integer('id_masyarakat').references('id').inTable('masyarakat').onDelete('CASCADE')
     })
 };
 

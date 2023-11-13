@@ -42,6 +42,7 @@ class Controller {
     static homePage (req, res) {
         try {
             res.render('login', {
+                layout: 'login',
                 title: 'Laporan Masyarakat Depok',
                 message: req.flash('success')
             })
@@ -67,6 +68,7 @@ class Controller {
                 } else {
                     errors.push({message: 'NIK atau Password Salah'})
                     res.render('login', {
+                        layout: 'login',
                         title: 'Laporan Masyarakat Depok',
                         errors
                     })
@@ -74,6 +76,7 @@ class Controller {
             } else {
                 errors.push({message: 'NIK atau Password Salah'})
                 res.render('login', {
+                    layout: 'login',
                     title: 'Laporan Masyarakat Depok',
                     errors
                 })
@@ -86,6 +89,7 @@ class Controller {
     static async loginPetugasGet (req,res) {
         try {
             res.render('login-petugas', {
+                layout: 'login-petugas',
                 title: 'Login Petugas'
             })
         } catch (error) {
@@ -100,8 +104,8 @@ class Controller {
 
             const find = await db('petugas').where({username: username})
             if (find.length > 0) {
-                const passCheck = find[0].password
-                if (passCheck == password) {
+                const passCheck = await bcrypt.compare(password,find[0].password)
+                if (passCheck) {
                     req.session.auth = true
                     req.session.role = 'admin'
                     req.session.aidi = find[0].id
@@ -109,6 +113,7 @@ class Controller {
                 } else {
                     errors.push({message: 'Username atau Password Salah'})
                     res.render('login-petugas', {
+                        layout: 'login-petugas',
                         title: 'Login Petugas',
                         errors
                     })
@@ -116,6 +121,7 @@ class Controller {
             } else {
                 errors.push({message: 'Username atau Password Salah'})
                 res.render('login-petugas', {
+                    layout: 'login-petugas',
                     title: 'Login Petugas',
                     errors
                 })
@@ -128,6 +134,7 @@ class Controller {
     static async registerGet (req,res) {
         try {
             res.render('register', {
+                layout: 'register',
                 title: 'Halaman Registrasi',
             })
         } catch (error) {
@@ -174,6 +181,7 @@ class Controller {
                 res.redirect('/')
             } else {
                 res.render('register', {
+                    layout: 'register',
                     title: 'Halaman Register',
                     errors
                 })
