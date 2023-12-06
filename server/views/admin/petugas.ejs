@@ -5,6 +5,10 @@
         margin-top: 20px;
     }
 
+    .nodata {
+        margin-top: 20%;
+    }
+
     th {
         background-color: #2E3691 !important;
         text-align: center !important;
@@ -35,7 +39,7 @@
     <% } %>
 
     <% if (data.length == 0) { %>
-        <h1 class="text-center">Tidak Ada Petugas Lain!</h1>
+        <h1 class="text-center nodata">Tidak Ada Petugas Lain!</h1>
     <% } else { %>
         <table class="table text-center" id="example">
             <thead>
