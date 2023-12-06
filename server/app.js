@@ -3,10 +3,10 @@ const app = express()
 const routes = require('./routes/')
 const ejs = require('ejs')
 const path = require('path')
-const port = 3000
 const session = require('express-session')
 const flash = require('connect-flash')
 const expressEjsLayouts = require('express-ejs-layouts')
+const port = 3000
 
 app.set('view engine', 'ejs')
 

@@ -5,6 +5,10 @@
         font-weight: 700;
     }
 
+    .nodata {
+        margin-top: 20%;
+    }
+
     th {
         background-color: #2E3691 !important;
         color: white !important;
@@ -35,7 +39,7 @@
         <h1 class="title">Riwayat Laporan</h1>
 
         <% if (data.length == 0) { %>
-         <h2 class="nodata">Anda Belum Membuat Laporan!</h2>
+         <h1 class="text-center nodata">Anda Belum Membuat Laporan!</h1>
         <% } else { %>
             <div class="container w-100 mt-3">
                 <table class="table w-100" id="example">

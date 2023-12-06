@@ -5,6 +5,10 @@
         text-align: center;
     }
 
+    .nodata {
+        margin-top: 20%;
+    }
+
     th {
         background-color: #2E3691 !important;
         text-align: center !important;
@@ -32,7 +36,7 @@
         <h1 class="title">Laporan yang Sudah Dibalas</h1>
 
         <% if (data.length == 0) { %>
-            <h1>Tidak Ada Laporan yang Sudah Dibalas!</h1>
+            <h1 class="text-center nodata">Tidak Ada Laporan yang Sudah Dibalas!</h1>
         <% } else { %>
             <table class="table" id="example">
                 <thead>
